@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FileDost - Video Cloud</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:white;font-family:Arial}
+header{padding:18px;background:#141c32;display:flex;justify-content:space-between}
+.logo{font-size:25px;font-weight:bold;color:#55d6be}
+main{max-width:900px;margin:auto;padding:20px}
+h1{text-align:center;margin-top:35px}
+p{color:#bdc8da}
+.panel,.video-card{background:#141c32;padding:20px;border-radius:14px;margin:20px 0}
+input{width:100%;padding:13px;border-radius:8px;margin:10px 0}
+button{background:#55d6be;color:#07131a;border:0;padding:13px 20px;border-radius:8px;font-weight:bold}
+video{width:100%;border-radius:10px;margin-top:10px}
+#videos{display:grid;grid-template-columns:1fr;gap:15px}
+footer{text-align:center;padding:25px;color:#8995aa}
+</style>
+</head>
+<body>
+<header><div class="logo">FileDost</div><div>Video Cloud</div></header>
+<main>
+<h1>Your Files, Your World.</h1>
+<p style="text-align:center">Upload, watch and share your videos.</p>
+
+<section class="panel">
+<h2>Upload Your Video</h2>
+<input type="file" id="video" accept="video/*">
+<button onclick="uploadVideo()">Upload Video</button>
+<p id="message">Choose a video to upload.</p>
+</section>
+
+<h2>All Videos</h2>
+<div id="videos">Loading videos...</div>
+</main>
+<footer>© 2026 FileDost</footer>
+
+<script>
+async function loadVideos(){
+ const box=document.getElementById('videos');
+ try{
+  const response=await fetch('/api/videos');
+  const videos=await response.json();
+  box.innerHTML='';
+  if(!videos.length){box.textContent='Abhi koi video upload nahi hua.';return;}
+  videos.forEach(v=>{
+   const card=document.createElement('div');
+   card.className='video-card';
+   const title=document.createElement('h3');
+   title.textContent=v.title;
+   const player=document.createElement('video');
+   player.src=v.url;
+   player.controls=true;
+   player.preload='metadata';
+   const link=document.createElement('a');
+   link.href=v.url;
+   link.download=v.filename;
+   link.textContent='Download Video';
+   link.style.color='#55d6be';
+   card.append(title,player,document.createElement('br'),link);
+   box.appendChild(card);
+  });
+ }catch(e){box.textContent='Videos load nahi ho paaye.';}
+}
+async function uploadVideo(){
+ const file=document.getElementById('video').files[0];
+ const message=document.getElementById('message');
+ if(!file){message.textContent='Pehle video select karo.';return;}
+ const data=new FormData();
+ data.append('video',file);
+ message.textContent='Uploading...';
+ try{
+  const response=await fetch('/api/upload',{method:'POST',body:data});
+  const result=await response.json();
+  message.textContent=result.message;
+  if(response.ok){document.getElementById('video').value='';loadVideos();}
+ }catch(e){message.textContent='Upload failed.';}
+}
+loadVideos();
+</script>
+</body>
+</html>
