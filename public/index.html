@@ -132,25 +132,105 @@ async function shareVideo(url){
  }catch(e){}
 }
 
-document.getElementById('uploadForm').addEventListener('submit',async function(e){
+
+const uploadForm = document.getElementById('uploadForm');
+
+const progressStyle = document.createElement('style');
+progressStyle.textContent = `
+#fdProgress{display:none;background:#111a2b;padding:16px;border-radius:13px;margin:15px 0;color:white}
+#fdProgressBar{height:12px;background:#26344d;border-radius:20px;overflow:hidden;margin:12px 0}
+#fdProgressFill{height:100%;width:0%;background:#718cff;transition:width .2s}
+#fdToast{display:none;position:fixed;top:15px;left:5%;width:90%;z-index:99999;padding:15px;background:#172544;color:white;border:1px solid #718cff;border-radius:12px;text-align:center}
+`;
+document.head.appendChild(progressStyle);
+
+uploadForm.insertAdjacentHTML('afterend', `
+<div id="fdProgress">
+ <b id="fdProgressText">Uploading: 0%</b>
+ <div id="fdProgressBar"><div id="fdProgressFill"></div></div>
+ <span id="fdProgressSize">0 MB / 0 MB</span>
+</div>
+<div id="fdToast"></div>
+`);
+
+function fdNotify(message, success) {
+ const toast = document.getElementById('fdToast');
+ toast.textContent = message;
+ toast.style.display = 'block';
+ toast.style.borderColor = success ? '#35c98b' : '#ff6868';
+ setTimeout(() => toast.style.display = 'none', 4000);
+}
+
+uploadForm.addEventListener('submit', function(e) {
  e.preventDefault();
- const input=document.getElementById('videoInput');
- const message=document.getElementById('message');
- if(!input.files.length){message.textContent='Please select a video.';return;}
- const data=new FormData();
- data.append('video',input.files[0]);
- message.textContent='Uploading... Please wait.';
- try{
-  const response=await fetch('/api/upload',{method:'POST',body:data});
-  const result=await response.json();
-  if(!response.ok) throw new Error(result.message||'Upload failed');
-  message.textContent='Video uploaded successfully!';
-  input.value='';
-  await loadVideos();
- }catch(error){
-  message.textContent=error.message;
+
+ const input = document.getElementById('videoInput');
+ const message = document.getElementById('message');
+
+ if (!input.files.length) {
+  message.textContent = 'Please select a video.';
+  fdNotify('Please select a video.', false);
+  return;
  }
+
+ const file = input.files[0];
+ const data = new FormData();
+ data.append('video', file);
+
+ const progress = document.getElementById('fdProgress');
+ const fill = document.getElementById('fdProgressFill');
+ const percentText = document.getElementById('fdProgressText');
+ const sizeText = document.getElementById('fdProgressSize');
+ const mb = n => (n / 1048576).toFixed(2);
+
+ progress.style.display = 'block';
+ fill.style.width = '0%';
+ percentText.textContent = 'Uploading: 0%';
+ sizeText.textContent = '0 MB / ' + mb(file.size) + ' MB';
+ message.textContent = 'Uploading... Please wait.';
+
+ const xhr = new XMLHttpRequest();
+ xhr.open('POST', '/api/upload');
+
+ xhr.upload.onprogress = function(event) {
+  if (event.lengthComputable) {
+   const percent = Math.min(100, Math.round(event.loaded / event.total * 100));
+   fill.style.width = percent + '%';
+   percentText.textContent = 'Uploading: ' + percent + '%';
+   sizeText.textContent = mb(Math.min(event.loaded, file.size)) + ' MB / ' + mb(file.size) + ' MB';
+  }
+ };
+
+ xhr.onload = async function() {
+  let result = {};
+  try { result = JSON.parse(xhr.responseText); } catch (e) {}
+
+  if (xhr.status >= 200 && xhr.status < 300) {
+   fill.style.width = '100%';
+   percentText.textContent = 'Uploading: 100%';
+   sizeText.textContent = mb(file.size) + ' MB / ' + mb(file.size) + ' MB';
+   message.textContent = 'Video uploaded successfully!';
+   fdNotify('Video upload successful!', true);
+   input.value = '';
+   const fileName = document.getElementById('fileName');
+   if (fileName) fileName.textContent = 'No video selected';
+   try { await loadVideos(); } catch (e) {}
+  } else {
+   percentText.textContent = 'Upload failed';
+   message.textContent = result.message || 'Upload failed';
+   fdNotify(message.textContent, false);
+  }
+ };
+
+ xhr.onerror = function() {
+  percentText.textContent = 'Upload failed';
+  message.textContent = 'Network error. Please try again.';
+  fdNotify(message.textContent, false);
+ };
+
+ xhr.send(data);
 });
+
 loadVideos();
 </script>
 </body>
