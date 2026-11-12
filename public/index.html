@@ -88,6 +88,7 @@ async function loadVideos(){
   if(!response.ok) throw new Error('Could not load videos');
   allVideos=await response.json();
   renderVideos(allVideos);
+  openRequestedVideo();
  }catch(error){
   grid.innerHTML='<div class="empty">Videos could not be loaded. Please refresh.</div>';
   document.getElementById('videoCount').textContent='';
@@ -102,19 +103,59 @@ function renderVideos(videos){
   return;
  }
  grid.innerHTML=videos.map(video=>`
-  <article class="video-card">
+  <article class="video-card" id="video-${video.id}">
    <video controls preload="metadata" src="${video.url}"></video>
    <div class="video-info">
     <h3>${escapeHTML(video.title||'Untitled video')}</h3>
     <div class="video-actions">
      <a href="${video.url}" download>Download</a>
-     <a href="#" onclick="shareVideo('${location.origin}${video.url}');return false">Share</a>
+     <a href="#" onclick="copyVideoLink('${video.id}');return false">Copy Link</a>
+     <a href="#" onclick="shareVideo('${video.id}');return false">Share</a>
     </div>
    </div>
   </article>
  `).join('');
 }
 
+function getWatchLink(id){
+ return location.origin+'/?v='+encodeURIComponent(id);
+}
+
+async function copyVideoLink(id){
+ const url=getWatchLink(id);
+ try{
+  await navigator.clipboard.writeText(url);
+  alert('FileDost video link copied!');
+ }catch(e){
+  const input=document.createElement('textarea');
+  input.value=url;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('copy');
+  input.remove();
+  alert('FileDost video link copied!');
+ }
+}
+
+async function shareVideo(id){
+ const url=getWatchLink(id);
+ try{
+  if(navigator.share){
+   await navigator.share({title:'Watch on FileDost',url});
+  }else{
+   await copyVideoLink(id);
+  }
+ }catch(e){}
+}
+
+function openRequestedVideo(){
+ const id=new URLSearchParams(location.search).get('v');
+ if(!id) return;
+ const card=document.getElementById('video-'+id);
+ if(card){
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+ }
+}
 function escapeHTML(value){
  return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
