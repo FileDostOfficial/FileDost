@@ -1,84 +1,156 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FileDost - Video Cloud</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d18">
+<title>FileDost - Your Video Space</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0b1020;color:white;font-family:Arial}
-header{padding:18px;background:#141c32;display:flex;justify-content:space-between}
-.logo{font-size:25px;font-weight:bold;color:#55d6be}
-main{max-width:900px;margin:auto;padding:20px}
-h1{text-align:center;margin-top:35px}
-p{color:#bdc8da}
-.panel,.video-card{background:#141c32;padding:20px;border-radius:14px;margin:20px 0}
-input{width:100%;padding:13px;border-radius:8px;margin:10px 0}
-button{background:#55d6be;color:#07131a;border:0;padding:13px 20px;border-radius:8px;font-weight:bold}
-video{width:100%;border-radius:10px;margin-top:10px}
-#videos{display:grid;grid-template-columns:1fr;gap:15px}
-footer{text-align:center;padding:25px;color:#8995aa}
+body{margin:0;background:#090d18;color:#f5f7ff;font-family:Arial,sans-serif}
+header{height:72px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:#101727;border-bottom:1px solid #263047;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:800;color:#fff}
+.logo span{color:#6d8cff}
+.upload-top{background:#526dff;color:white;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:bold}
+main{max-width:1150px;margin:auto;padding:35px 20px}
+.hero{padding:42px 25px;border-radius:22px;background:linear-gradient(120deg,#182b57,#29205a,#151b36);text-align:center}
+.hero h1{font-size:clamp(30px,6vw,48px);margin:0 0 12px}
+.hero p{color:#c3cbe0;font-size:16px;line-height:1.6}
+.search{max-width:560px;margin:25px auto 0;display:flex;gap:8px}
+.search input{flex:1;min-width:0;padding:15px;border:1px solid #3b4968;background:#101827;color:white;border-radius:11px;font-size:15px;outline:none}
+.search button,.upload-button{border:0;background:#637cff;color:white;padding:14px 20px;border-radius:10px;font-weight:bold}
+.section{margin-top:38px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.section h2{font-size:23px;margin:0}
+.muted{color:#9ba8c2;font-size:13px}
+.upload-box{background:#111a2b;border:1px solid #263650;padding:22px;border-radius:16px;margin-top:25px}
+.upload-box h2{margin:0 0 8px;font-size:21px}
+.upload-box p{color:#aab5ca;font-size:14px}
+input[type=file]{width:100%;padding:13px;background:#0b1220;border:1px dashed #52617d;color:#cbd5e1;border-radius:10px;margin:12px 0}
+.upload-button{width:100%;font-size:15px;cursor:pointer}
+#message{font-size:14px;color:#aabaff;margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:18px}
+.video-card{background:#121b2c;border:1px solid #25334c;border-radius:15px;overflow:hidden}
+.video-card video{width:100%;aspect-ratio:16/9;background:#05070c;display:block}
+.video-info{padding:14px}
+.video-info h3{font-size:16px;margin:0 0 12px;overflow-wrap:anywhere}
+.video-actions{display:flex;gap:9px}
+.video-actions a{flex:1;text-align:center;text-decoration:none;padding:10px;border-radius:8px;background:#26385e;color:white;font-size:13px}
+.empty{padding:35px;text-align:center;color:#98a6c1;background:#111a2b;border-radius:14px;grid-column:1/-1}
+footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #202b40;margin-top:50px;font-size:13px}
+@media(max-width:550px){header{padding:0 16px}.logo{font-size:21px}.upload-top{padding:10px 12px;font-size:13px}main{padding:22px 14px}.hero{padding:35px 16px}.search button{padding:12px}.section h2{font-size:20px}}
 </style>
 </head>
 <body>
-<header><div class="logo">FileDost</div><div>Video Cloud</div></header>
+<header>
+ <div class="logo">File<span>Dost</span></div>
+ <a class="upload-top" href="#upload">＋ Upload Video</a>
+</header>
 <main>
-<h1>Your Files, Your World.</h1>
-<p style="text-align:center">Upload, watch and share your videos.</p>
+ <section class="hero">
+  <h1>Your Videos. Your Space.</h1>
+  <p>Upload, watch and share your videos with FileDost.</p>
+  <div class="search">
+   <input id="searchInput" type="search" placeholder="Search videos...">
+   <button onclick="searchVideos()">Search</button>
+  </div>
+ </section>
 
-<section class="panel">
-<h2>Upload Your Video</h2>
-<input type="file" id="video" accept="video/*">
-<button onclick="uploadVideo()">Upload Video</button>
-<p id="message">Choose a video to upload.</p>
-</section>
+ <section class="upload-box" id="upload">
+  <h2>Upload Your Video</h2>
+  <p>Select a video from your device to upload it.</p>
+  <form id="uploadForm">
+   <input id="videoInput" type="file" accept="video/*" required>
+   <button class="upload-button" type="submit">Upload Video</button>
+  </form>
+  <div id="message"></div>
+ </section>
 
-<h2>All Videos</h2>
-<div id="videos">Loading videos...</div>
+ <section class="section">
+  <div class="section-head">
+   <h2>All Videos</h2>
+   <span class="muted" id="videoCount">Loading...</span>
+  </div>
+  <div class="grid" id="videoGrid">
+   <div class="empty">Loading videos...</div>
+  </div>
+ </section>
 </main>
-<footer>© 2026 FileDost</footer>
+<footer>© 2026 FileDost · Your Videos, Your Space</footer>
 
 <script>
+let allVideos=[];
+
 async function loadVideos(){
- const box=document.getElementById('videos');
+ const grid=document.getElementById('videoGrid');
  try{
   const response=await fetch('/api/videos');
-  const videos=await response.json();
-  box.innerHTML='';
-  if(!videos.length){box.textContent='Abhi koi video upload nahi hua.';return;}
-  videos.forEach(v=>{
-   const card=document.createElement('div');
-   card.className='video-card';
-   const title=document.createElement('h3');
-   title.textContent=v.title;
-   const player=document.createElement('video');
-   player.src=v.url;
-   player.controls=true;
-   player.preload='metadata';
-   const link=document.createElement('a');
-   link.href=v.url;
-   link.download=v.filename;
-   link.textContent='Download Video';
-   link.style.color='#55d6be';
-   card.append(title,player,document.createElement('br'),link);
-   box.appendChild(card);
-  });
- }catch(e){box.textContent='Videos load nahi ho paaye.';}
+  if(!response.ok) throw new Error('Could not load videos');
+  allVideos=await response.json();
+  renderVideos(allVideos);
+ }catch(error){
+  grid.innerHTML='<div class="empty">Videos could not be loaded. Please refresh.</div>';
+  document.getElementById('videoCount').textContent='';
+ }
 }
-async function uploadVideo(){
- const file=document.getElementById('video').files[0];
+
+function renderVideos(videos){
+ const grid=document.getElementById('videoGrid');
+ document.getElementById('videoCount').textContent=videos.length+' videos';
+ if(!videos.length){
+  grid.innerHTML='<div class="empty">No videos uploaded yet. Be the first to upload!</div>';
+  return;
+ }
+ grid.innerHTML=videos.map(video=>`
+  <article class="video-card">
+   <video controls preload="metadata" src="${video.url}"></video>
+   <div class="video-info">
+    <h3>${escapeHTML(video.title||'Untitled video')}</h3>
+    <div class="video-actions">
+     <a href="${video.url}" download>Download</a>
+     <a href="#" onclick="shareVideo('${location.origin}${video.url}');return false">Share</a>
+    </div>
+   </div>
+  </article>
+ `).join('');
+}
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function searchVideos(){
+ const term=document.getElementById('searchInput').value.toLowerCase().trim();
+ renderVideos(allVideos.filter(v=>(v.title||'').toLowerCase().includes(term)));
+}
+document.getElementById('searchInput').addEventListener('input',searchVideos);
+
+async function shareVideo(url){
+ try{
+  if(navigator.share) await navigator.share({title:'Watch on FileDost',url});
+  else{await navigator.clipboard.writeText(url);alert('Video link copied!');}
+ }catch(e){}
+}
+
+document.getElementById('uploadForm').addEventListener('submit',async function(e){
+ e.preventDefault();
+ const input=document.getElementById('videoInput');
  const message=document.getElementById('message');
- if(!file){message.textContent='Pehle video select karo.';return;}
+ if(!input.files.length){message.textContent='Please select a video.';return;}
  const data=new FormData();
- data.append('video',file);
- message.textContent='Uploading...';
+ data.append('video',input.files[0]);
+ message.textContent='Uploading... Please wait.';
  try{
   const response=await fetch('/api/upload',{method:'POST',body:data});
   const result=await response.json();
-  message.textContent=result.message;
-  if(response.ok){document.getElementById('video').value='';loadVideos();}
- }catch(e){message.textContent='Upload failed.';}
-}
+  if(!response.ok) throw new Error(result.message||'Upload failed');
+  message.textContent='Video uploaded successfully!';
+  input.value='';
+  await loadVideos();
+ }catch(error){
+  message.textContent=error.message;
+ }
+});
 loadVideos();
 </script>
 </body>
