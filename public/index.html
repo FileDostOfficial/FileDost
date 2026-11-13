@@ -212,6 +212,60 @@ input,select,textarea{background:#0d1729!important;color:white!important;border:
 <meta name="twitter:title" content="FileDost - Video Sharing Platform">
 <meta name="twitter:description" content="Your videos, your space. Share with FileDost.">
 
+
+<style id="fd-admin-pro-v1">
+#adminPanel{
+  max-width:1100px!important;
+  margin:30px auto!important;
+  padding:clamp(16px,3vw,28px)!important;
+  background:linear-gradient(145deg,#111c30,#0b1220)!important;
+  border:1px solid #304362!important;
+  border-radius:22px!important;
+  box-shadow:0 18px 55px #0005!important;
+  color:#f4f7ff!important;
+}
+#adminPanel h2{font-size:clamp(22px,4vw,30px);letter-spacing:-.5px}
+#adminPanel h3{font-size:19px;border-bottom:1px solid #2a3a55;padding-bottom:12px}
+#adminPanel>div:first-of-type{gap:14px!important}
+#adminPanel>div:first-of-type>div{
+  background:linear-gradient(145deg,#203452,#17263d)!important;
+  border:1px solid #385071;
+  border-radius:16px!important;
+  padding:19px!important;
+  box-shadow:0 8px 22px #0002;
+  transition:transform .2s,border-color .2s;
+}
+#adminPanel>div:first-of-type>div:hover{
+  transform:translateY(-3px);
+  border-color:#718fff;
+}
+#adminPanel>div:first-of-type>div h2{
+  font-size:29px;margin:10px 0 0;font-weight:800;
+}
+#adminRefresh{
+  padding:12px 20px!important;
+  border-radius:11px!important;
+  background:linear-gradient(100deg,#536dfe,#8065f7)!important;
+  box-shadow:0 5px 18px #536dfe44;
+  cursor:pointer;
+}
+#adminPanel button{cursor:pointer;transition:filter .2s,transform .2s}
+#adminPanel button:hover{filter:brightness(1.13);transform:translateY(-1px)}
+#adminUsers>div,#adminVideos>div{
+  border:1px solid #30435f;
+  border-radius:13px!important;
+  padding:15px!important;
+  background:#17263c!important;
+}
+#adminUsers small{display:inline-block;margin-top:5px}
+#adminMessage{min-height:20px}
+@media(max-width:600px){
+  #adminPanel{margin:16px 10px!important;border-radius:16px!important}
+  #adminPanel>div:first-of-type>div{min-width:calc(50% - 8px)!important}
+  #adminPanel>div:first-of-type>div h2{font-size:24px}
+}
+</style>
+
 </head>
 <body>
 
