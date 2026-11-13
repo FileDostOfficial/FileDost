@@ -1,0 +1,19 @@
+{
+  "name": "FileDost - Video Sharing",
+  "short_name": "FileDost",
+  "description": "Upload, watch and share videos with FileDost.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080d19",
+  "theme_color": "#080d19",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/filedost-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

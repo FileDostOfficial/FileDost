@@ -176,8 +176,64 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
 .fd-logout{width:100%;padding:12px;border:1px solid #46506b;background:#202940;color:white;border-radius:10px}
 @media(max-width:700px){.fd-auth{grid-template-columns:1fr;margin:18px 8px;border-radius:18px}.fd-brand{padding:25px 22px}.fd-brand h2{font-size:22px;margin-bottom:12px}.fd-tag{margin-bottom:18px}.fd-benefit{padding:9px;margin:6px 0}.fd-secure{margin-top:15px}.fd-form-panel{padding:25px 20px}}
 </style>
-\n</head>
+\n
+<style id="FD-PRO-DASHBOARD-V1">
+:root{--fd-bg:#080d19;--fd-card:#111b2d;--fd-border:#263753;--fd-primary:#647cff;--fd-text:#f4f7ff;--fd-muted:#aab7cf}
+body{background:var(--fd-bg)!important;color:var(--fd-text)!important}
+button,.fd-main-btn{transition:.2s ease;cursor:pointer}
+button:hover,.fd-main-btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+input,select,textarea{background:#0d1729!important;color:white!important;border:1px solid var(--fd-border)!important;border-radius:10px!important}
+.fd-pro-top{max-width:1200px;margin:18px auto;padding:20px;background:linear-gradient(120deg,#182c55,#10172d 65%,#25205a);border:1px solid #344a79;border-radius:20px;box-shadow:0 12px 35px #0005}
+.fd-pro-brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.fd-pro-brand h2{margin:0;font-size:27px;color:white}
+.fd-pro-brand p{margin:6px 0 0;color:#c0cce5}
+.fd-pro-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.fd-pro-link{display:block;text-decoration:none!important;color:white!important;background:#ffffff12;border:1px solid #ffffff24;border-radius:13px;padding:14px;font-weight:700;text-align:center}
+.fd-pro-link:hover{background:#ffffff22}
+.fd-pro-link span{display:block;font-size:23px;margin-bottom:6px}
+@media(max-width:650px){.fd-pro-top{margin:12px;padding:15px}.fd-pro-brand h2{font-size:23px}.fd-pro-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
+
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#080d19">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- FD-PRO-SEO-V1 -->
+<meta name="description" content="FileDost - Upload, watch, download and share videos easily.">
+<meta name="keywords" content="FileDost, video sharing, video upload, video download">
+<meta name="author" content="FileDost">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FileDost - Video Sharing Platform">
+<meta property="og:description" content="Upload, watch and share videos with FileDost.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FileDost - Video Sharing Platform">
+<meta name="twitter:description" content="Your videos, your space. Share with FileDost.">
+
+</head>
 <body>
+
+
+<div id="fdInstallBox" style="max-width:1100px;margin:12px auto;padding:0 15px">
+<button id="fdInstallAppBtn" type="button" style="display:none;width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(100deg,#536dfe,#8b5cf6);color:white;font-size:16px;font-weight:bold">
+📲 Install FileDost App
+</button>
+</div>
+<div class="fd-pro-top" id="fdProDashboard">
+ <div class="fd-pro-brand">
+  <div><h2>🚀 FileDost</h2><p>Your files. Your videos. Your space.</p></div>
+  <div style="background:#ffffff18;padding:9px 14px;border-radius:30px;color:#dce6ff;font-size:13px">✦ PREMIUM EXPERIENCE</div>
+ </div>
+ <div class="fd-pro-links">
+  <a class="fd-pro-link" href="#fdLinkForm"><span>🔗</span>Open Video Link</a>
+  <a class="fd-pro-link" href="#uploadForm"><span>☁️</span>Upload Video</a>
+  <a class="fd-pro-link" href="#videoGrid"><span>🎬</span>Explore Videos</a>
+  <a class="fd-pro-link" href="#profilePanel"><span>👤</span>My Profile</a>
+ </div>
+</div>
+
 <header>
  <div class="logo">File<span>Dost</span></div>
  <a class="upload-top" href="#upload">＋ Upload Video</a>
@@ -250,6 +306,17 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
     </div>
 
     <div id="authStatus" class="fd-status">Not logged in</div>
+
+    <div id="profilePanel" style="display:none;margin-top:18px;padding:18px;background:#17243a;border:1px solid #34466a;border-radius:14px">
+      <h3 style="color:white;margin-top:0">👤 My Profile</h3>
+      <label style="color:#cbd5e1">Email Address</label>
+      <input id="profileEmail" type="email" readonly style="width:100%;padding:12px;margin:8px 0 14px;border-radius:8px">
+      <label style="color:#cbd5e1">Your Name</label>
+      <input id="profileName" type="text" placeholder="Enter your name" style="width:100%;padding:12px;margin:8px 0">
+      <button type="button" id="saveProfileBtn" class="fd-main-btn">Save Profile</button>
+      <p id="profileMessage" style="color:#9cebc0"></p>
+    </div>
+
     <p id="authMessage" class="fd-message"></p>
     <button type="button" id="logoutBtn" class="fd-logout" style="display:none">Logout</button>
   </div>
@@ -266,7 +333,18 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
   <div id="message"></div>
  </section>
 
- <section class="section">
+ 
+<section style="max-width:1100px;margin:20px auto;padding:20px;background:#111b2d;border:1px solid #34466a;border-radius:16px">
+  <h2 style="color:white">🔗 Open Video by Link</h2>
+  <p style="color:#aebbd2">Paste your FileDost video link below.</p>
+  <form id="fdLinkForm" style="display:flex;gap:10px;flex-wrap:wrap">
+    <input id="fdVideoLink" type="url" placeholder="Paste FileDost video link here" required style="flex:1;min-width:200px;padding:13px;border-radius:9px">
+    <button type="submit" style="padding:13px 20px;border:0;border-radius:9px;background:#637cff;color:white;font-weight:bold">Open Video</button>
+  </form>
+  <p id="fdLinkMessage" style="color:#9cebc0"></p>
+</section>
+
+<section class="section">
   <div class="section-head">
    <h2>All Videos</h2>
    <span class="muted" id="videoCount">Loading...</span>
@@ -275,6 +353,36 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
    <div class="empty">Loading videos...</div>
   </div>
  </section>
+
+<section id="adminPanel" style="display:none;margin:25px auto;padding:20px;background:#111b2d;border:1px solid #34466a;border-radius:18px;max-width:1100px">
+  <h2 style="color:#fff">🛡️ FileDost Admin Dashboard</h2>
+  <p style="color:#aebbd2">Admin Control Panel</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin:18px 0">
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Total Users</div>
+      <h2 id="adminUserCount" style="color:white">0</h2>
+    </div>
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Total Videos</div>
+      <h2 id="adminVideoCount" style="color:white">0</h2>
+    </div>
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Total Downloads</div>
+      <h2 id="adminDownloadCount" style="color:white">0</h2>
+    </div>
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Storage Used</div>
+      <h2 id="adminStorageCount" style="color:white">0 MB</h2>
+    </div>
+  </div>
+  <button id="adminRefresh" type="button" style="padding:11px 18px;border:0;border-radius:9px;background:#637cff;color:white;font-weight:bold">Refresh Dashboard</button>
+  <p id="adminMessage" style="color:#ffd28a"></p>
+  <h3 style="color:white;margin-top:25px">👥 All Users</h3>
+  <div id="adminUsers" style="overflow-x:auto;color:white">Loading...</div>
+  <h3 style="color:white;margin-top:25px">🎬 All Videos</h3>
+  <div id="adminVideos" style="color:white">Loading...</div>
+</section>
+
 </main>
 <footer>© 2026 FileDost · Your Videos, Your Space</footer>
 
@@ -308,7 +416,7 @@ function renderVideos(videos){
    <div class="video-info">
     <h3>${escapeHTML(video.title||'Untitled video')}</h3>
     <div class="video-actions">
-     <a href="${video.url}" download>Download</a>
+     <a href="/api/download/${encodeURIComponent(video.id)}">Download</a>
      <a href="#" onclick="copyVideoLink('${video.id}');return false">Copy Link</a>
      <a href="#" onclick="shareVideo('${video.id}');return false">Share</a>
     </div>
@@ -320,6 +428,76 @@ function renderVideos(videos){
 function getWatchLink(id){
  return location.origin+'/?v='+encodeURIComponent(id);
 }
+
+function openFileDostPlayer(item) {
+ const old = document.getElementById('fdLinkPlayer');
+ if (old) old.remove();
+
+ const overlay = document.createElement('div');
+ overlay.id = 'fdLinkPlayer';
+ overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:999999;display:flex;align-items:center;justify-content:center;padding:18px';
+
+ const panel = document.createElement('div');
+ panel.style.cssText = 'width:100%;max-width:850px;background:#111b2d;padding:16px;border-radius:15px';
+
+ const close = document.createElement('button');
+ close.textContent = '✕ Close';
+ close.style.cssText = 'padding:10px 16px;margin-bottom:12px;background:#d94355;color:white;border:0;border-radius:8px';
+ close.onclick = () => {
+   const player = panel.querySelector('video');
+   if (player) player.pause();
+   overlay.remove();
+ };
+
+ const heading = document.createElement('h3');
+ heading.textContent = item.title || 'FileDost Video';
+ heading.style.color = 'white';
+
+ const video = document.createElement('video');
+ video.src = item.url;
+ video.controls = true;
+ video.autoplay = true;
+ video.playsInline = true;
+ video.style.cssText = 'width:100%;max-height:75vh;background:black;border-radius:10px';
+
+ panel.append(close, heading, video);
+ overlay.appendChild(panel);
+ overlay.addEventListener('click', e => {
+   if (e.target === overlay) close.click();
+ });
+ document.body.appendChild(overlay);
+}
+
+document.getElementById('fdLinkForm').addEventListener('submit', async e => {
+ e.preventDefault();
+ const msg = document.getElementById('fdLinkMessage');
+ const raw = document.getElementById('fdVideoLink').value.trim();
+
+ try {
+   const link = new URL(raw);
+   if (link.origin !== location.origin) {
+     throw new Error('Please paste a link from this FileDost website.');
+   }
+
+   const id = link.searchParams.get('v');
+   if (!id) throw new Error('Valid FileDost video link paste karo.');
+
+   const response = await fetch('/api/videos');
+   if (!response.ok) throw new Error('Videos load nahi hue.');
+
+   const videos = await response.json();
+   const item = videos.find(v => String(v.id) === id);
+
+   if (!item) throw new Error('Video nahi mila. Link check karo.');
+
+   msg.textContent = 'Video opening...';
+   openFileDostPlayer(item);
+   msg.textContent = 'Video opened successfully!';
+ } catch (error) {
+   msg.textContent = error.message || 'Invalid video link.';
+ }
+});
+
 
 async function copyVideoLink(id){
  const url=getWatchLink(id);
@@ -402,7 +580,7 @@ function fdNotify(message, success) {
  setTimeout(() => toast.style.display = 'none', 4000);
 }
 
-uploadForm.addEventListener('submit', function(e) {
+uploadForm.addEventListener('submit', async function(e) {
  e.preventDefault();
 
  const input = document.getElementById('videoInput');
@@ -411,6 +589,13 @@ uploadForm.addEventListener('submit', function(e) {
  if (!input.files.length) {
   message.textContent = 'Please select a video.';
   fdNotify('Please select a video.', false);
+  return;
+ }
+
+ const token = await window.fileDostGetToken?.();
+ if (!token) {
+  message.textContent = 'Please login before uploading.';
+  fdNotify('Please login before uploading.', false);
   return;
  }
 
@@ -432,6 +617,7 @@ uploadForm.addEventListener('submit', function(e) {
 
  const xhr = new XMLHttpRequest();
  xhr.open('POST', '/api/upload');
+ xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
  xhr.upload.onprogress = function(event) {
   if (event.lengthComputable) {
@@ -496,6 +682,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+window.fileDostGetToken = async () => {
+  if (!auth.currentUser) return null;
+  return await auth.currentUser.getIdToken();
+};
 const $ = id => document.getElementById(id);
 const message = $("authMessage");
 
@@ -510,6 +701,36 @@ function tab(mode) {
  $("showRegister").classList.toggle("active", mode === "register");
  showMessage("");
 }
+$("saveProfileBtn").onclick = async () => {
+ const user = auth.currentUser;
+ const name = $("profileName").value.trim();
+ const status = $("profileMessage");
+ if (!user) {
+  status.textContent = "Please login first.";
+  return;
+ }
+ if (!name) {
+  status.textContent = "Please enter your name.";
+  return;
+ }
+ try {
+  await updateProfile(user, { displayName: name });
+  $("authStatus").textContent = "Logged in: " + name;
+  status.textContent = "Profile updated successfully!";
+ } catch (error) {
+  status.textContent = error.message;
+ }
+};
+
+onAuthStateChanged(auth, user => {
+ const panel = $("profilePanel");
+ panel.style.display = user ? "block" : "none";
+ if (user) {
+  $("profileEmail").value = user.email || "";
+  $("profileName").value = user.displayName || "";
+ }
+});
+
 $("showLogin").onclick = $("toLogin").onclick = () => tab("login");
 $("showRegister").onclick = $("toRegister").onclick = () => tab("register");
 
@@ -575,73 +796,138 @@ onAuthStateChanged(auth, user => {
   $("fdRegister").style.display = "none";
  }
 });
+
+// FileDost Admin Dashboard
+const ADMIN_EMAIL = 'nishadsatyam238@gmail.com';
+const adminPanel = document.getElementById('adminPanel');
+
+async function adminRequest(url, options = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Please login first');
+  const token = await user.getIdToken();
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: 'Bearer ' + token,
+      ...(options.body ? {'Content-Type':'application/json'} : {})
+    }
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || 'Request failed');
+  return data;
+}
+
+function adminEscape(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+async function loadAdminDashboard() {
+  const msg = document.getElementById('adminMessage');
+  msg.textContent = 'Loading dashboard...';
+  try {
+    const [stats, users, videos] = await Promise.all([
+      adminRequest('/api/admin/stats'),
+      adminRequest('/api/admin/users'),
+      adminRequest('/api/admin/videos')
+    ]);
+
+    document.getElementById('adminUserCount').textContent = stats.users;
+    document.getElementById('adminVideoCount').textContent = stats.videos;
+    document.getElementById('adminDownloadCount').textContent = stats.downloads || 0;
+    document.getElementById('adminStorageCount').textContent =
+      ((stats.storage || 0) / 1048576).toFixed(2) + ' MB';
+
+    document.getElementById('adminUsers').innerHTML = users.length
+      ? users.map(u => `
+        <div style="padding:12px;margin:8px 0;background:#1b2941;border-radius:10px;overflow-wrap:anywhere">
+          <b>${adminEscape(u.name || 'No name')}</b><br>
+          ${adminEscape(u.email)}<br>
+          <small style="color:#aebbd2">Joined: ${adminEscape(u.created || 'Unknown')}</small>
+        </div>`).join('')
+      : '<p>No users found.</p>';
+
+    document.getElementById('adminVideos').innerHTML = videos.length
+      ? videos.map(v => `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;margin:8px 0;background:#1b2941;border-radius:10px">
+          <span>${adminEscape(v.title)}</span>
+          <button type="button" data-delete-video="${adminEscape(v.id)}" style="padding:9px 13px;border:0;border-radius:8px;background:#d94355;color:white">Delete</button>
+        </div>`).join('')
+      : '<p>No videos uploaded.</p>';
+
+    msg.textContent = 'Dashboard updated successfully.';
+  } catch (error) {
+    msg.textContent = error.message;
+  }
+}
+
+document.getElementById('adminRefresh').addEventListener('click', loadAdminDashboard);
+
+document.getElementById('adminVideos').addEventListener('click', async event => {
+  const button = event.target.closest('[data-delete-video]');
+  if (!button) return;
+  if (!confirm('Kya aap ye video delete karna chahte hain?')) return;
+  try {
+    await adminRequest('/api/admin/videos/' + encodeURIComponent(button.dataset.deleteVideo), {
+      method: 'DELETE'
+    });
+    await loadAdminDashboard();
+  } catch (error) {
+    document.getElementById('adminMessage').textContent = error.message;
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  if (user && user.email === ADMIN_EMAIL) {
+    adminPanel.style.display = 'block';
+    loadAdminDashboard();
+  } else {
+    adminPanel.style.display = 'none';
+  }
+});
+
+
 </script>
 
 
+
+<script>
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(err => console.log("PWA:", err));
+  });
+}
+</script>
+
+<script id="fd-install-feature">
+let fdInstallPrompt = null;
+const fdInstallBtn = document.getElementById("fdInstallAppBtn");
+
+window.addEventListener("beforeinstallprompt", event => {
+  event.preventDefault();
+  fdInstallPrompt = event;
+  if (fdInstallBtn) fdInstallBtn.style.display = "block";
+});
+
+if (fdInstallBtn) {
+  fdInstallBtn.addEventListener("click", async () => {
+    if (!fdInstallPrompt) {
+      alert("Chrome menu se Add to Home Screen ya Install App select karein.");
+      return;
+    }
+    fdInstallPrompt.prompt();
+    await fdInstallPrompt.userChoice;
+    fdInstallPrompt = null;
+    fdInstallBtn.style.display = "none";
+  });
+}
+
+window.addEventListener("appinstalled", () => {
+  if (fdInstallBtn) fdInstallBtn.style.display = "none";
+});
+</script>
+
 </body>
-</html>W
-       public/index.html      Modified
- try {                                    await signInWithEmailAndPassword(auth>
-  showMessage("Login successful!");      } catch(e) { showMessage(e.message, tr>
-};
-                                        async function googleLogin() {
- try { await signInWithRedirect(auth, n>
- catch(e) { showMessage(e.message, true>}                                       $("googleBtn").onclick = googleLogin;   $("googleRegisterBtn").onclick = google>
-$("forgotBtn").onclick = async () => {   const email = $("authEmail").value.tri>
- if (!email) return showMessage("Enter > try {
-  await sendPasswordResetEmail(auth, em>  showMessage("Password reset link sent>
- } catch(e) { showMessage(e.message, tr>
-};                                      
-$("logoutBtn").onclick = async () => {   try { await signOut(auth); showMessage>
- catch(e) { showMessage(e.message, true>
-};                                      
-getRedirectResult(auth).catch(e => show>
-
-onAuthStateChanged(auth, user => {       $("authStatus").textContent = user       ? "Logged in: " + (user.displayName |>  : "Not logged in";                     $("logoutBtn").style.display = user ? > $("showLogin").style.display = user ? > $("showRegister").style.display = user> if (user) {                              $("fdLogin").style.display = "none";    $("fdRegister").style.display = "none> }                                      });                                     </script>
-                                                                                </body>                                 </html>
-.fd-password{position:relative}.fd-password input{padding-right:65px}
-.fd-eye{position:absolute;right:9px;top:8px;border:0;background:transparent;color:#b69aff;padding:7px;cursor:pointer}
-
-.fd-password{position:relative}.fd-password input{padding-right:65px}
-.fd-eye{position:absolute;right:9px;top:8px;border:0;background:transparent;color:#b69aff;padding:7px;cursor:pointer}
-
-.fd-password{
- position:relative;
- width:100%;
-}
-
-.fd-password input{
- width:100%;
- padding:15px 55px 15px 15px;
- background:#15192a;
- border:1px solid #45405f;
- border-radius:12px;
- color:#fff;
- font-size:14px;
-}
-
-.fd-password input:focus{
- border-color:#a477ff;
- box-shadow:0 0 0 3px #9b70ff25;
-}
-
-.fd-eye{
- position:absolute;
- right:10px;
- top:50%;
- transform:translateY(-50%);
- width:38px;
- height:38px;
- border:0;
- border-radius:9px;
- background:#29213e;
- color:#c7aaff;
- font-size:19px;
- display:flex;
- align-items:center;
- justify-content:center;
- font-weight:bold;
- cursor:pointer;
-}
-0
-
+</html>

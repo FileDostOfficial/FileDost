@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d18">
+<title>FileDost - Your Video Space</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:#f5f7ff;font-family:Arial,sans-serif}
+header{height:72px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:#101727;border-bottom:1px solid #263047;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:800;color:#fff}
+.logo span{color:#6d8cff}
+.upload-top{background:#526dff;color:white;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:bold}
+main{max-width:1150px;margin:auto;padding:35px 20px}
+.hero{padding:42px 25px;border-radius:22px;background:linear-gradient(120deg,#182b57,#29205a,#151b36);text-align:center}
+.hero h1{font-size:clamp(30px,6vw,48px);margin:0 0 12px}
+.hero p{color:#c3cbe0;font-size:16px;line-height:1.6}
+.search{max-width:560px;margin:25px auto 0;display:flex;gap:8px}
+.search input{flex:1;min-width:0;padding:15px;border:1px solid #3b4968;background:#101827;color:white;border-radius:11px;font-size:15px;outline:none}
+.search button,.upload-button{border:0;background:#637cff;color:white;padding:14px 20px;border-radius:10px;font-weight:bold}
+.section{margin-top:38px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.section h2{font-size:23px;margin:0}
+.muted{color:#9ba8c2;font-size:13px}
+.upload-box{background:#111a2b;border:1px solid #263650;padding:22px;border-radius:16px;margin-top:25px}
+.upload-box h2{margin:0 0 8px;font-size:21px}
+.upload-box p{color:#aab5ca;font-size:14px}
+input[type=file]{width:100%;padding:13px;background:#0b1220;border:1px dashed #52617d;color:#cbd5e1;border-radius:10px;margin:12px 0}
+.upload-button{width:100%;font-size:15px;cursor:pointer}
+#message{font-size:14px;color:#aabaff;margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:18px}
+.video-card{position:relative;background:linear-gradient(155deg,#17243a 0%,#0d1524 100%);border:1px solid #2b3d5c;border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.22);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.video-card:hover{transform:translateY(-5px);border-color:#637cff;box-shadow:0 14px 30px rgba(55,85,180,.2)}
+.video-card video{width:100%;aspect-ratio:16/9;background:#05070c;display:block;transition:filter .25s ease}
+.video-card:hover video{filter:brightness(1.06)}
+.video-info{padding:16px}
+.video-info h3{font-size:16px;line-height:1.45;margin:0 0 14px;overflow-wrap:anywhere;min-height:46px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.video-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.video-actions a{flex:1;text-align:center;text-decoration:none;padding:10px 5px;border:1px solid #354b75;border-radius:9px;background:#26385e;color:white;font-size:12px;font-weight:600;transition:background .2s ease,border-color .2s ease}
+.video-actions a:hover{background:#637cff;border-color:#8294ff}
+.video-info{padding:14px}
+.video-info h3{font-size:16px;margin:0 0 12px;overflow-wrap:anywhere}
+.video-actions{display:flex;gap:9px}
+.video-actions a{flex:1;text-align:center;text-decoration:none;padding:10px;border-radius:8px;background:#26385e;color:white;font-size:13px}
+.empty{padding:35px;text-align:center;color:#98a6c1;background:#111a2b;border-radius:14px;grid-column:1/-1}
+footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #202b40;margin-top:50px;font-size:13px}
+@media(max-width:550px){header{padding:0 16px}.logo{font-size:21px}.upload-top{padding:10px 12px;font-size:13px}main{padding:22px 14px}.hero{padding:35px 16px}.search button{padding:12px}.section h2{font-size:20px}}
+</style>
+
+<style id="filedost-auth-design">
+#account {
+  max-width: 440px;
+  margin: 35px auto;
+  padding: 28px;
+  background: linear-gradient(145deg,#171d32,#0c1222);
+  border: 1px solid #303b58;
+  border-radius: 22px;
+  box-shadow: 0 15px 45px #0008;
+}
+#account h2 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+#account #authStatus,
+#account #authMessage {
+  text-align: center;
+  color: #aab7d0;
+  font-size: 14px;
+}
+#account input {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  margin: 13px 0;
+  padding: 15px 16px;
+  border: 1px solid #394663;
+  border-radius: 12px;
+  background: #0b1020;
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+#account input:focus {
+  border-color: #7c6cff;
+  box-shadow: 0 0 0 3px #7c6cff30;
+}
+#account button {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(100deg,#6655ed,#a34ce8);
+  cursor: pointer;
+}
+#account button:hover { opacity: .9; }
+#account #googleBtn {
+  background: #fff;
+  color: #202124;
+  border: 1px solid #ddd;
+}
+#account #logoutBtn {
+  background: #29334b;
+  color: white;
+}
+</style>
+\n
+<style id="filedost-premium-auth">
+.fd-auth{max-width:1050px;margin:35px auto;display:grid;grid-template-columns:1fr 1fr;background:#0d1020;border:1px solid #292747;border-radius:25px;overflow:hidden;box-shadow:0 20px 65px #0009;color:#fff;font-family:Arial,sans-serif}
+.fd-brand{padding:42px 32px;background:radial-gradient(circle at 20% 10%,#5931a8,#171333 48%,#0d1020);display:flex;flex-direction:column;justify-content:center}
+.fd-logo{width:55px;height:55px;border-radius:17px;background:linear-gradient(135deg,#a65bff,#514bff);display:grid;place-items:center;font-size:27px;box-shadow:0 0 30px #8755ff88}
+.fd-brand h1{font-size:36px;margin:15px 0 0}.fd-brand h1 span{color:#ad83ff}
+.fd-tag{letter-spacing:4px;color:#c8b8ff;font-size:11px;margin:5px 0 35px}
+.fd-brand h2{font-size:27px;line-height:1.3;margin-bottom:25px}
+.fd-benefit{display:flex;gap:13px;align-items:center;margin:10px 0;padding:13px;background:#ffffff12;border:1px solid #ffffff18;border-radius:12px;font-size:20px}
+.fd-benefit span{font-size:13px;color:#e2ddf7}
+.fd-secure{margin-top:30px;color:#9cebc0;font-size:13px}
+.fd-form-panel{padding:35px 32px;min-width:0}
+.fd-tabs{display:flex;background:#171a2c;padding:5px;border-radius:13px;margin-bottom:28px;gap:5px}
+.fd-tab{flex:1;padding:12px 5px;border:0;border-radius:10px;background:transparent;color:#aaa;font-weight:bold;cursor:pointer}
+.fd-tab.active{background:linear-gradient(100deg,#8052f5,#a34be9);color:#fff}
+.fd-form-panel h2{font-size:27px;margin:0 0 7px}
+.fd-sub{color:#9da5bb;font-size:13px;margin:0 0 24px}
+.fd-form-panel label{display:block;font-size:12px;color:#d4d1e5;margin:14px 0 7px}
+.fd-form-panel input{width:100%;box-sizing:border-box;padding:14px 15px;background:#15192a;border:1px solid #343b56;border-radius:11px;color:white;font-size:14px;outline:none}
+.fd-form-panel input:focus{border-color:#9b70ff;box-shadow:0 0 0 3px #9467ff22}
+.fd-password{
+ position:relative;
+ width:100%;
+}
+.fd-password input{
+ width:100%;
+ padding:15px 55px 15px 15px;
+ background:#15192a;
+ border:1px solid #45405f;
+ border-radius:12px;
+ color:#fff;
+ font-size:14px;
+}
+.fd-password input:focus{
+ border-color:#a477ff;
+ box-shadow:0 0 0 3px #9b70ff25;
+}
+.fd-eye{
+ position:absolute;
+ right:10px;
+ top:50%;
+ transform:translateY(-50%);
+ width:38px;
+ height:38px;
+ border:0;
+ border-radius:9px;
+ background:#29213e;
+ color:#c7aaff;
+ font-size:19px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:bold;
+ cursor:pointer;
+}
+.fd-forgot{display:block;margin:12px 0 18px auto;background:none;border:0;color:#b99aff;font-size:12px;cursor:pointer}
+.fd-main-btn{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(100deg,#7950ef,#a34ce9);color:white;font-size:15px;font-weight:bold;cursor:pointer;box-shadow:0 8px 25px #8249ef44}
+.fd-or{display:flex;align-items:center;gap:12px;color:#82889e;font-size:10px;letter-spacing:2px;margin:23px 0}
+.fd-or:before,.fd-or:after{content:"";height:1px;background:#30364d;flex:1}
+.fd-google{width:100%;padding:13px;border:1px solid #ddd;border-radius:11px;background:white;color:#222;font-weight:bold;cursor:pointer}
+.fd-switch{text-align:center;color:#aab0c2;font-size:12px;margin-top:22px}
+.fd-switch button{border:0;background:none;color:#b99aff;font-weight:bold;cursor:pointer}
+.fd-status{text-align:center;color:#9cebc0;font-size:12px;margin-top:16px;overflow-wrap:anywhere}
+.fd-message{text-align:center;color:#ffb7b7;font-size:12px;overflow-wrap:anywhere}
+.fd-logout{width:100%;padding:12px;border:1px solid #46506b;background:#202940;color:white;border-radius:10px}
+@media(max-width:700px){.fd-auth{grid-template-columns:1fr;margin:18px 8px;border-radius:18px}.fd-brand{padding:25px 22px}.fd-brand h2{font-size:22px;margin-bottom:12px}.fd-tag{margin-bottom:18px}.fd-benefit{padding:9px;margin:6px 0}.fd-secure{margin-top:15px}.fd-form-panel{padding:25px 20px}}
+</style>
+\n</head>
+<body>
+<header>
+ <div class="logo">File<span>Dost</span></div>
+ <a class="upload-top" href="#upload">＋ Upload Video</a>
+</header>
+<main>
+ <section class="hero">
+  <h1>Your Videos. Your Space.</h1>
+  <p>Upload, watch and share your videos with FileDost.</p>
+  <div class="search">
+   <input id="searchInput" type="search" placeholder="Search videos...">
+   <button onclick="searchVideos()">Search</button>
+  </div>
+ </section>
+
+ 
+
+<section id="account" class="fd-auth">
+  <div class="fd-brand">
+    <div class="fd-logo">▶</div>
+    <h1>File<span>Dost</span></h1>
+    <p class="fd-tag">SHARE • EARN • GROW</p>
+    <h2>Your All-in-One<br>Video Sharing Platform</h2>
+    <div class="fd-benefit">▶ <span>Watch & Download Quality Videos</span></div>
+    <div class="fd-benefit">💰 <span>Earn from Uploads & Referrals</span></div>
+    <div class="fd-benefit">👑 <span>Premium Benefits & Bonuses</span></div>
+    <div class="fd-secure">✓ Secure Account Access</div>
+  </div>
+
+  <div class="fd-form-panel">
+    <div class="fd-tabs">
+      <button type="button" id="showLogin" class="fd-tab active">Login</button>
+      <button type="button" id="showRegister" class="fd-tab">Create Account</button>
+    </div>
+
+    <div id="fdLogin">
+      <h2>Welcome Back!</h2>
+      <p class="fd-sub">Login to your FileDost account</p>
+      <label>Gmail Address</label>
+      <input id="authEmail" type="email" placeholder="Enter your Gmail address" autocomplete="email">
+      <label>Password</label>
+      <div class="fd-password">
+        <input id="authPassword" type="password" placeholder="Enter your password" autocomplete="current-password">
+      </div>
+      <button type="button" id="forgotBtn" class="fd-forgot">Forgot Password?</button>
+      <button type="button" id="loginBtn" class="fd-main-btn">Login Now →</button>
+      <div class="fd-or"><span>OR CONTINUE WITH</span></div>
+      <button type="button" id="googleBtn" class="fd-google">🌐 Continue with Google</button>
+      <p class="fd-switch">Don't have an account? <button type="button" id="toRegister">Create Account</button></p>
+    </div>
+
+    <div id="fdRegister" style="display:none">
+      <h2>Create Your Account</h2>
+      <p class="fd-sub">Join FileDost and start sharing</p>
+      <label>Full Name</label>
+      <input id="authName" type="text" placeholder="Enter your full name" autocomplete="name">
+      <label>Gmail Address</label>
+      <input id="regEmail" type="email" placeholder="Enter your Gmail address" autocomplete="email">
+      <label>Password</label>
+      <div class="fd-password">
+        <input id="regPassword" type="password" placeholder="Create a strong password" autocomplete="new-password">
+      </div>
+      <label>Confirm Password</label>
+      <div class="fd-password">
+        <input id="confirmPassword" type="password" placeholder="Confirm your password" autocomplete="new-password">
+      </div>
+      <button type="button" id="registerBtn" class="fd-main-btn">Create Account →</button>
+      <div class="fd-or"><span>OR CONTINUE WITH</span></div>
+      <button type="button" id="googleRegisterBtn" class="fd-google">🌐 Sign up with Google</button>
+      <p class="fd-switch">Already have an account? <button type="button" id="toLogin">Login</button></p>
+    </div>
+
+    <div id="authStatus" class="fd-status">Not logged in</div>
+
+    <div id="profilePanel" style="display:none;margin-top:18px;padding:18px;background:#17243a;border:1px solid #34466a;border-radius:14px">
+      <h3 style="color:white;margin-top:0">👤 My Profile</h3>
+      <label style="color:#cbd5e1">Email Address</label>
+      <input id="profileEmail" type="email" readonly style="width:100%;padding:12px;margin:8px 0 14px;border-radius:8px">
+      <label style="color:#cbd5e1">Your Name</label>
+      <input id="profileName" type="text" placeholder="Enter your name" style="width:100%;padding:12px;margin:8px 0">
+      <button type="button" id="saveProfileBtn" class="fd-main-btn">Save Profile</button>
+      <p id="profileMessage" style="color:#9cebc0"></p>
+    </div>
+
+    <p id="authMessage" class="fd-message"></p>
+    <button type="button" id="logoutBtn" class="fd-logout" style="display:none">Logout</button>
+  </div>
+</section>
+
+
+<section class="upload-box" id="upload">
+  <h2>Upload Your Video</h2>
+  <p>Select a video from your device to upload it.</p>
+  <form id="uploadForm">
+   <input id="videoInput" type="file" accept="video/*" required>
+   <button class="upload-button" type="submit">Upload Video</button>
+  </form>
+  <div id="message"></div>
+ </section>
+
+ <section class="section">
+  <div class="section-head">
+   <h2>All Videos</h2>
+   <span class="muted" id="videoCount">Loading...</span>
+  </div>
+  <div class="grid" id="videoGrid">
+   <div class="empty">Loading videos...</div>
+  </div>
+ </section>
+
+<section id="adminPanel" style="display:none;margin:25px auto;padding:20px;background:#111b2d;border:1px solid #34466a;border-radius:18px;max-width:1100px">
+  <h2 style="color:#fff">🛡️ FileDost Admin Dashboard</h2>
+  <p style="color:#aebbd2">Admin Control Panel</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin:18px 0">
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Total Users</div>
+      <h2 id="adminUserCount" style="color:white">0</h2>
+    </div>
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Total Videos</div>
+      <h2 id="adminVideoCount" style="color:white">0</h2>
+    </div>
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Total Downloads</div>
+      <h2 id="adminDownloadCount" style="color:white">0</h2>
+    </div>
+    <div style="background:#202f4b;padding:16px;border-radius:12px;flex:1;min-width:120px">
+      <div style="color:#b9c7df">Storage Used</div>
+      <h2 id="adminStorageCount" style="color:white">0 MB</h2>
+    </div>
+  </div>
+  <button id="adminRefresh" type="button" style="padding:11px 18px;border:0;border-radius:9px;background:#637cff;color:white;font-weight:bold">Refresh Dashboard</button>
+  <p id="adminMessage" style="color:#ffd28a"></p>
+  <h3 style="color:white;margin-top:25px">👥 All Users</h3>
+  <div id="adminUsers" style="overflow-x:auto;color:white">Loading...</div>
+  <h3 style="color:white;margin-top:25px">🎬 All Videos</h3>
+  <div id="adminVideos" style="color:white">Loading...</div>
+</section>
+
+</main>
+<footer>© 2026 FileDost · Your Videos, Your Space</footer>
+
+<script>
+let allVideos=[];
+
+async function loadVideos(){
+ const grid=document.getElementById('videoGrid');
+ try{
+  const response=await fetch('/api/videos');
+  if(!response.ok) throw new Error('Could not load videos');
+  allVideos=await response.json();
+  renderVideos(allVideos);
+  openRequestedVideo();
+ }catch(error){
+  grid.innerHTML='<div class="empty">Videos could not be loaded. Please refresh.</div>';
+  document.getElementById('videoCount').textContent='';
+ }
+}
+
+function renderVideos(videos){
+ const grid=document.getElementById('videoGrid');
+ document.getElementById('videoCount').textContent=videos.length+' videos';
+ if(!videos.length){
+  grid.innerHTML='<div class="empty">No videos uploaded yet. Be the first to upload!</div>';
+  return;
+ }
+ grid.innerHTML=videos.map(video=>`
+  <article class="video-card" id="video-${video.id}">
+   <video controls preload="metadata" src="${video.url}"></video>
+   <div class="video-info">
+    <h3>${escapeHTML(video.title||'Untitled video')}</h3>
+    <div class="video-actions">
+     <a href="/api/download/${encodeURIComponent(video.id)}">Download</a>
+     <a href="#" onclick="copyVideoLink('${video.id}');return false">Copy Link</a>
+     <a href="#" onclick="shareVideo('${video.id}');return false">Share</a>
+    </div>
+   </div>
+  </article>
+ `).join('');
+}
+
+function getWatchLink(id){
+ return location.origin+'/?v='+encodeURIComponent(id);
+}
+
+async function copyVideoLink(id){
+ const url=getWatchLink(id);
+ try{
+  await navigator.clipboard.writeText(url);
+  alert('FileDost video link copied!');
+ }catch(e){
+  const input=document.createElement('textarea');
+  input.value=url;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand('copy');
+  input.remove();
+  alert('FileDost video link copied!');
+ }
+}
+
+async function shareVideo(id){
+ const url=getWatchLink(id);
+ try{
+  if(navigator.share){
+   await navigator.share({title:'Watch on FileDost',url});
+  }else{
+   await copyVideoLink(id);
+  }
+ }catch(e){}
+}
+
+function openRequestedVideo(){
+ const id=new URLSearchParams(location.search).get('v');
+ if(!id) return;
+ const card=document.getElementById('video-'+id);
+ if(card){
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+ }
+}
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function searchVideos(){
+ const term=document.getElementById('searchInput').value.toLowerCase().trim();
+ renderVideos(allVideos.filter(v=>(v.title||'').toLowerCase().includes(term)));
+}
+document.getElementById('searchInput').addEventListener('input',searchVideos);
+
+async function shareVideo(url){
+ try{
+  if(navigator.share) await navigator.share({title:'Watch on FileDost',url});
+  else{await navigator.clipboard.writeText(url);alert('Video link copied!');}
+ }catch(e){}
+}
+
+
+const uploadForm = document.getElementById('uploadForm');
+
+const progressStyle = document.createElement('style');
+progressStyle.textContent = `
+#fdProgress{display:none;background:#111a2b;padding:16px;border-radius:13px;margin:15px 0;color:white}
+#fdProgressBar{height:12px;background:#26344d;border-radius:20px;overflow:hidden;margin:12px 0}
+#fdProgressFill{height:100%;width:0%;background:#718cff;transition:width .2s}
+#fdToast{display:none;position:fixed;top:15px;left:5%;width:90%;z-index:99999;padding:15px;background:#172544;color:white;border:1px solid #718cff;border-radius:12px;text-align:center}
+`;
+document.head.appendChild(progressStyle);
+
+uploadForm.insertAdjacentHTML('afterend', `
+<div id="fdProgress">
+ <b id="fdProgressText">Uploading: 0%</b>
+ <div id="fdProgressBar"><div id="fdProgressFill"></div></div>
+ <span id="fdProgressSize">0 MB / 0 MB</span>
+</div>
+<div id="fdToast"></div>
+`);
+
+function fdNotify(message, success) {
+ const toast = document.getElementById('fdToast');
+ toast.textContent = message;
+ toast.style.display = 'block';
+ toast.style.borderColor = success ? '#35c98b' : '#ff6868';
+ setTimeout(() => toast.style.display = 'none', 4000);
+}
+
+uploadForm.addEventListener('submit', async function(e) {
+ e.preventDefault();
+
+ const input = document.getElementById('videoInput');
+ const message = document.getElementById('message');
+
+ if (!input.files.length) {
+  message.textContent = 'Please select a video.';
+  fdNotify('Please select a video.', false);
+  return;
+ }
+
+ const token = await window.fileDostGetToken?.();
+ if (!token) {
+  message.textContent = 'Please login before uploading.';
+  fdNotify('Please login before uploading.', false);
+  return;
+ }
+
+ const file = input.files[0];
+ const data = new FormData();
+ data.append('video', file);
+
+ const progress = document.getElementById('fdProgress');
+ const fill = document.getElementById('fdProgressFill');
+ const percentText = document.getElementById('fdProgressText');
+ const sizeText = document.getElementById('fdProgressSize');
+ const mb = n => (n / 1048576).toFixed(2);
+
+ progress.style.display = 'block';
+ fill.style.width = '0%';
+ percentText.textContent = 'Uploading: 0%';
+ sizeText.textContent = '0 MB / ' + mb(file.size) + ' MB';
+ message.textContent = 'Uploading... Please wait.';
+
+ const xhr = new XMLHttpRequest();
+ xhr.open('POST', '/api/upload');
+ xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+ xhr.upload.onprogress = function(event) {
+  if (event.lengthComputable) {
+   const percent = Math.min(100, Math.round(event.loaded / event.total * 100));
+   fill.style.width = percent + '%';
+   percentText.textContent = 'Uploading: ' + percent + '%';
+   sizeText.textContent = mb(Math.min(event.loaded, file.size)) + ' MB / ' + mb(file.size) + ' MB';
+  }
+ };
+
+ xhr.onload = async function() {
+  let result = {};
+  try { result = JSON.parse(xhr.responseText); } catch (e) {}
+
+  if (xhr.status >= 200 && xhr.status < 300) {
+   fill.style.width = '100%';
+   percentText.textContent = 'Uploading: 100%';
+   sizeText.textContent = mb(file.size) + ' MB / ' + mb(file.size) + ' MB';
+   message.textContent = 'Video uploaded successfully!';
+   fdNotify('Video upload successful!', true);
+   input.value = '';
+   const fileName = document.getElementById('fileName');
+   if (fileName) fileName.textContent = 'No video selected';
+   try { await loadVideos(); } catch (e) {}
+  } else {
+   percentText.textContent = 'Upload failed';
+   message.textContent = result.message || 'Upload failed';
+   fdNotify(message.textContent, false);
+  }
+ };
+
+ xhr.onerror = function() {
+  percentText.textContent = 'Upload failed';
+  message.textContent = 'Network error. Please try again.';
+  fdNotify(message.textContent, false);
+ };
+
+ xhr.send(data);
+});
+
+loadVideos();
+</script>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {
+ getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+ GoogleAuthProvider, signInWithRedirect, getRedirectResult,
+ onAuthStateChanged, signOut, sendPasswordResetEmail, updateProfile
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyA3ICf30AO8EaSii94c4ZiblEPoXlDFci4",
+ authDomain: "filedost.firebaseapp.com",
+ projectId: "filedost",
+ storageBucket: "filedost.firebasestorage.app",
+ messagingSenderId: "1088546177507",
+ appId: "1:1088546177507:web:9b1bfded991f5269f820d6",
+ measurementId: "G-8KK490CLFQ"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.fileDostGetToken = async () => {
+  if (!auth.currentUser) return null;
+  return await auth.currentUser.getIdToken();
+};
+const $ = id => document.getElementById(id);
+const message = $("authMessage");
+
+function showMessage(text, error=false) {
+ message.textContent = text;
+ message.style.color = error ? "#ffaaaa" : "#9cebc0";
+}
+function tab(mode) {
+ $("fdLogin").style.display = mode === "login" ? "block" : "none";
+ $("fdRegister").style.display = mode === "register" ? "block" : "none";
+ $("showLogin").classList.toggle("active", mode === "login");
+ $("showRegister").classList.toggle("active", mode === "register");
+ showMessage("");
+}
+$("saveProfileBtn").onclick = async () => {
+ const user = auth.currentUser;
+ const name = $("profileName").value.trim();
+ const status = $("profileMessage");
+ if (!user) {
+  status.textContent = "Please login first.";
+  return;
+ }
+ if (!name) {
+  status.textContent = "Please enter your name.";
+  return;
+ }
+ try {
+  await updateProfile(user, { displayName: name });
+  $("authStatus").textContent = "Logged in: " + name;
+  status.textContent = "Profile updated successfully!";
+ } catch (error) {
+  status.textContent = error.message;
+ }
+};
+
+onAuthStateChanged(auth, user => {
+ const panel = $("profilePanel");
+ panel.style.display = user ? "block" : "none";
+ if (user) {
+  $("profileEmail").value = user.email || "";
+  $("profileName").value = user.displayName || "";
+ }
+});
+
+$("showLogin").onclick = $("toLogin").onclick = () => tab("login");
+$("showRegister").onclick = $("toRegister").onclick = () => tab("register");
+
+
+
+$("registerBtn").onclick = async () => {
+ const name = $("authName").value.trim();
+ const email = $("regEmail").value.trim();
+ const pass = $("regPassword").value;
+ const confirm = $("confirmPassword").value;
+ if (!name || !email || !pass || !confirm) return showMessage("Please fill all fields.", true);
+ if (pass.length < 6) return showMessage("Password must be at least 6 characters.", true);
+ if (pass !== confirm) return showMessage("Passwords do not match.", true);
+ try {
+  const result = await createUserWithEmailAndPassword(auth, email, pass);
+  await updateProfile(result.user, { displayName: name });
+  showMessage("Account created successfully!");
+ } catch(e) { showMessage(e.message, true); }
+};
+
+$("loginBtn").onclick = async () => {
+ const email = $("authEmail").value.trim();
+ const pass = $("authPassword").value;
+ if (!email || !pass) return showMessage("Enter Gmail and password.", true);
+ try {
+  await signInWithEmailAndPassword(auth, email, pass);
+  showMessage("Login successful!");
+ } catch(e) { showMessage(e.message, true); }
+};
+
+async function googleLogin() {
+ try { await signInWithRedirect(auth, new GoogleAuthProvider()); }
+ catch(e) { showMessage(e.message, true); }
+}
+$("googleBtn").onclick = googleLogin;
+$("googleRegisterBtn").onclick = googleLogin;
+
+$("forgotBtn").onclick = async () => {
+ const email = $("authEmail").value.trim();
+ if (!email) return showMessage("Enter your Gmail address first.", true);
+ try {
+  await sendPasswordResetEmail(auth, email);
+  showMessage("Password reset link sent. Check your Gmail.");
+ } catch(e) { showMessage(e.message, true); }
+};
+
+$("logoutBtn").onclick = async () => {
+ try { await signOut(auth); showMessage("Logged out."); }
+ catch(e) { showMessage(e.message, true); }
+};
+
+getRedirectResult(auth).catch(e => showMessage(e.message, true));
+
+onAuthStateChanged(auth, user => {
+ $("authStatus").textContent = user
+  ? "Logged in: " + (user.displayName || user.email)
+  : "Not logged in";
+ $("logoutBtn").style.display = user ? "block" : "none";
+ $("showLogin").style.display = user ? "none" : "block";
+ $("showRegister").style.display = user ? "none" : "block";
+ if (user) {
+  $("fdLogin").style.display = "none";
+  $("fdRegister").style.display = "none";
+ }
+});
+
+// FileDost Admin Dashboard
+const ADMIN_EMAIL = 'nishadsatyam238@gmail.com';
+const adminPanel = document.getElementById('adminPanel');
+
+async function adminRequest(url, options = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Please login first');
+  const token = await user.getIdToken();
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: 'Bearer ' + token,
+      ...(options.body ? {'Content-Type':'application/json'} : {})
+    }
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || 'Request failed');
+  return data;
+}
+
+function adminEscape(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+async function loadAdminDashboard() {
+  const msg = document.getElementById('adminMessage');
+  msg.textContent = 'Loading dashboard...';
+  try {
+    const [stats, users, videos] = await Promise.all([
+      adminRequest('/api/admin/stats'),
+      adminRequest('/api/admin/users'),
+      adminRequest('/api/admin/videos')
+    ]);
+
+    document.getElementById('adminUserCount').textContent = stats.users;
+    document.getElementById('adminVideoCount').textContent = stats.videos;
+    document.getElementById('adminDownloadCount').textContent = stats.downloads || 0;
+    document.getElementById('adminStorageCount').textContent =
+      ((stats.storage || 0) / 1048576).toFixed(2) + ' MB';
+
+    document.getElementById('adminUsers').innerHTML = users.length
+      ? users.map(u => `
+        <div style="padding:12px;margin:8px 0;background:#1b2941;border-radius:10px;overflow-wrap:anywhere">
+          <b>${adminEscape(u.name || 'No name')}</b><br>
+          ${adminEscape(u.email)}<br>
+          <small style="color:#aebbd2">Joined: ${adminEscape(u.created || 'Unknown')}</small>
+        </div>`).join('')
+      : '<p>No users found.</p>';
+
+    document.getElementById('adminVideos').innerHTML = videos.length
+      ? videos.map(v => `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;margin:8px 0;background:#1b2941;border-radius:10px">
+          <span>${adminEscape(v.title)}</span>
+          <button type="button" data-delete-video="${adminEscape(v.id)}" style="padding:9px 13px;border:0;border-radius:8px;background:#d94355;color:white">Delete</button>
+        </div>`).join('')
+      : '<p>No videos uploaded.</p>';
+
+    msg.textContent = 'Dashboard updated successfully.';
+  } catch (error) {
+    msg.textContent = error.message;
+  }
+}
+
+document.getElementById('adminRefresh').addEventListener('click', loadAdminDashboard);
+
+document.getElementById('adminVideos').addEventListener('click', async event => {
+  const button = event.target.closest('[data-delete-video]');
+  if (!button) return;
+  if (!confirm('Kya aap ye video delete karna chahte hain?')) return;
+  try {
+    await adminRequest('/api/admin/videos/' + encodeURIComponent(button.dataset.deleteVideo), {
+      method: 'DELETE'
+    });
+    await loadAdminDashboard();
+  } catch (error) {
+    document.getElementById('adminMessage').textContent = error.message;
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  if (user && user.email === ADMIN_EMAIL) {
+    adminPanel.style.display = 'block';
+    loadAdminDashboard();
+  } else {
+    adminPanel.style.display = 'none';
+  }
+});
+
+
+</script>
+
+
+</body>
+</html>
