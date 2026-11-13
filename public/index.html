@@ -150,7 +150,10 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
  border-radius:9px;
  background:#29213e;
  color:#c7aaff;
- font-size:12px;
+ font-size:19px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
  font-weight:bold;
  cursor:pointer;
 }
@@ -210,7 +213,7 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
       <label>Password</label>
       <div class="fd-password">
         <input id="authPassword" type="password" placeholder="Enter your password" autocomplete="current-password">
-        <button type="button" class="fd-eye" data-target="authPassword">Show</button>
+        <button type="button" class="fd-eye" data-target="authPassword">👁️</button>
       </div>
       <button type="button" id="forgotBtn" class="fd-forgot">Forgot Password?</button>
       <button type="button" id="loginBtn" class="fd-main-btn">Login Now →</button>
@@ -229,12 +232,12 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
       <label>Password</label>
       <div class="fd-password">
         <input id="regPassword" type="password" placeholder="Create a strong password" autocomplete="new-password">
-        <button type="button" class="fd-eye" data-target="regPassword">Show</button>
+        <button type="button" class="fd-eye" data-target="regPassword">👁️</button>
       </div>
       <label>Confirm Password</label>
       <div class="fd-password">
         <input id="confirmPassword" type="password" placeholder="Confirm your password" autocomplete="new-password">
-        <button type="button" class="fd-eye" data-target="confirmPassword">Show</button>
+        <button type="button" class="fd-eye" data-target="confirmPassword">👁️</button>
       </div>
       <button type="button" id="registerBtn" class="fd-main-btn">Create Account →</button>
       <div class="fd-or"><span>OR CONTINUE WITH</span></div>
@@ -510,7 +513,7 @@ document.querySelectorAll(".fd-eye").forEach(btn => {
  btn.onclick = () => {
   const field = $(btn.dataset.target);
   field.type = field.type === "password" ? "text" : "password";
-  btn.textContent = field.type === "password" ? "Show" : "Hide";
+  btn.textContent = "👁️";
  };
 });
 
@@ -635,7 +638,10 @@ onAuthStateChanged(auth, user => {       $("authStatus").textContent = user     
  border-radius:9px;
  background:#29213e;
  color:#c7aaff;
- font-size:12px;
+ font-size:19px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
  font-weight:bold;
  cursor:pointer;
 }
