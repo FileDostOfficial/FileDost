@@ -40,7 +40,103 @@ input[type=file]{width:100%;padding:13px;background:#0b1220;border:1px dashed #5
 footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #202b40;margin-top:50px;font-size:13px}
 @media(max-width:550px){header{padding:0 16px}.logo{font-size:21px}.upload-top{padding:10px 12px;font-size:13px}main{padding:22px 14px}.hero{padding:35px 16px}.search button{padding:12px}.section h2{font-size:20px}}
 </style>
-</head>
+
+<style id="filedost-auth-design">
+#account {
+  max-width: 440px;
+  margin: 35px auto;
+  padding: 28px;
+  background: linear-gradient(145deg,#171d32,#0c1222);
+  border: 1px solid #303b58;
+  border-radius: 22px;
+  box-shadow: 0 15px 45px #0008;
+}
+#account h2 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+#account #authStatus,
+#account #authMessage {
+  text-align: center;
+  color: #aab7d0;
+  font-size: 14px;
+}
+#account input {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  margin: 13px 0;
+  padding: 15px 16px;
+  border: 1px solid #394663;
+  border-radius: 12px;
+  background: #0b1020;
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+#account input:focus {
+  border-color: #7c6cff;
+  box-shadow: 0 0 0 3px #7c6cff30;
+}
+#account button {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(100deg,#6655ed,#a34ce8);
+  cursor: pointer;
+}
+#account button:hover { opacity: .9; }
+#account #googleBtn {
+  background: #fff;
+  color: #202124;
+  border: 1px solid #ddd;
+}
+#account #logoutBtn {
+  background: #29334b;
+  color: white;
+}
+</style>
+\n
+<style id="filedost-premium-auth">
+.fd-auth{max-width:1050px;margin:35px auto;display:grid;grid-template-columns:1fr 1fr;background:#0d1020;border:1px solid #292747;border-radius:25px;overflow:hidden;box-shadow:0 20px 65px #0009;color:#fff;font-family:Arial,sans-serif}
+.fd-brand{padding:42px 32px;background:radial-gradient(circle at 20% 10%,#5931a8,#171333 48%,#0d1020);display:flex;flex-direction:column;justify-content:center}
+.fd-logo{width:55px;height:55px;border-radius:17px;background:linear-gradient(135deg,#a65bff,#514bff);display:grid;place-items:center;font-size:27px;box-shadow:0 0 30px #8755ff88}
+.fd-brand h1{font-size:36px;margin:15px 0 0}.fd-brand h1 span{color:#ad83ff}
+.fd-tag{letter-spacing:4px;color:#c8b8ff;font-size:11px;margin:5px 0 35px}
+.fd-brand h2{font-size:27px;line-height:1.3;margin-bottom:25px}
+.fd-benefit{display:flex;gap:13px;align-items:center;margin:10px 0;padding:13px;background:#ffffff12;border:1px solid #ffffff18;border-radius:12px;font-size:20px}
+.fd-benefit span{font-size:13px;color:#e2ddf7}
+.fd-secure{margin-top:30px;color:#9cebc0;font-size:13px}
+.fd-form-panel{padding:35px 32px;min-width:0}
+.fd-tabs{display:flex;background:#171a2c;padding:5px;border-radius:13px;margin-bottom:28px;gap:5px}
+.fd-tab{flex:1;padding:12px 5px;border:0;border-radius:10px;background:transparent;color:#aaa;font-weight:bold;cursor:pointer}
+.fd-tab.active{background:linear-gradient(100deg,#8052f5,#a34be9);color:#fff}
+.fd-form-panel h2{font-size:27px;margin:0 0 7px}
+.fd-sub{color:#9da5bb;font-size:13px;margin:0 0 24px}
+.fd-form-panel label{display:block;font-size:12px;color:#d4d1e5;margin:14px 0 7px}
+.fd-form-panel input{width:100%;box-sizing:border-box;padding:14px 15px;background:#15192a;border:1px solid #343b56;border-radius:11px;color:white;font-size:14px;outline:none}
+.fd-form-panel input:focus{border-color:#9b70ff;box-shadow:0 0 0 3px #9467ff22}
+.fd-password{position:relative}.fd-password input{padding-right:65px}
+.fd-eye{position:absolute;right:9px;top:8px;border:0;background:transparent;color:#b69aff;padding:7px;cursor:pointer}
+.fd-forgot{display:block;margin:12px 0 18px auto;background:none;border:0;color:#b99aff;font-size:12px;cursor:pointer}
+.fd-main-btn{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(100deg,#7950ef,#a34ce9);color:white;font-size:15px;font-weight:bold;cursor:pointer;box-shadow:0 8px 25px #8249ef44}
+.fd-or{display:flex;align-items:center;gap:12px;color:#82889e;font-size:10px;letter-spacing:2px;margin:23px 0}
+.fd-or:before,.fd-or:after{content:"";height:1px;background:#30364d;flex:1}
+.fd-google{width:100%;padding:13px;border:1px solid #ddd;border-radius:11px;background:white;color:#222;font-weight:bold;cursor:pointer}
+.fd-switch{text-align:center;color:#aab0c2;font-size:12px;margin-top:22px}
+.fd-switch button{border:0;background:none;color:#b99aff;font-weight:bold;cursor:pointer}
+.fd-status{text-align:center;color:#9cebc0;font-size:12px;margin-top:16px;overflow-wrap:anywhere}
+.fd-message{text-align:center;color:#ffb7b7;font-size:12px;overflow-wrap:anywhere}
+.fd-logout{width:100%;padding:12px;border:1px solid #46506b;background:#202940;color:white;border-radius:10px}
+@media(max-width:700px){.fd-auth{grid-template-columns:1fr;margin:18px 8px;border-radius:18px}.fd-brand{padding:25px 22px}.fd-brand h2{font-size:22px;margin-bottom:12px}.fd-tag{margin-bottom:18px}.fd-benefit{padding:9px;margin:6px 0}.fd-secure{margin-top:15px}.fd-form-panel{padding:25px 20px}}
+</style>
+\n</head>
 <body>
 <header>
  <div class="logo">File<span>Dost</span></div>
@@ -57,17 +153,71 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
  </section>
 
  
-<section class="upload-box" id="account">
- <h2>FileDost Account</h2>
- <p id="authStatus">Login or create your free account.</p>
- <input id="authEmail" type="email" placeholder="Email address">
- <input id="authPassword" type="password" placeholder="Password">
- <button class="upload-button" id="registerBtn" type="button">Create Account</button>
- <button class="upload-button" id="loginBtn" type="button" style="margin-top:10px">Login</button>
- <button class="upload-button" id="googleBtn" type="button" style="margin-top:10px">Continue with Google</button>
- <button class="upload-button" id="logoutBtn" type="button" style="margin-top:10px;display:none">Logout</button>
- <p id="authMessage"></p>
+
+<section id="account" class="fd-auth">
+  <div class="fd-brand">
+    <div class="fd-logo">▶</div>
+    <h1>File<span>Dost</span></h1>
+    <p class="fd-tag">SHARE • EARN • GROW</p>
+    <h2>Your All-in-One<br>Video Sharing Platform</h2>
+    <div class="fd-benefit">▶ <span>Watch & Download Quality Videos</span></div>
+    <div class="fd-benefit">💰 <span>Earn from Uploads & Referrals</span></div>
+    <div class="fd-benefit">👑 <span>Premium Benefits & Bonuses</span></div>
+    <div class="fd-secure">✓ Secure Account Access</div>
+  </div>
+
+  <div class="fd-form-panel">
+    <div class="fd-tabs">
+      <button type="button" id="showLogin" class="fd-tab active">Login</button>
+      <button type="button" id="showRegister" class="fd-tab">Create Account</button>
+    </div>
+
+    <div id="fdLogin">
+      <h2>Welcome Back!</h2>
+      <p class="fd-sub">Login to your FileDost account</p>
+      <label>Gmail Address</label>
+      <input id="authEmail" type="email" placeholder="Enter your Gmail address" autocomplete="email">
+      <label>Password</label>
+      <div class="fd-password">
+        <input id="authPassword" type="password" placeholder="Enter your password" autocomplete="current-password">
+        <button type="button" class="fd-eye" data-target="authPassword">Show</button>
+      </div>
+      <button type="button" id="forgotBtn" class="fd-forgot">Forgot Password?</button>
+      <button type="button" id="loginBtn" class="fd-main-btn">Login Now →</button>
+      <div class="fd-or"><span>OR CONTINUE WITH</span></div>
+      <button type="button" id="googleBtn" class="fd-google">🌐 Continue with Google</button>
+      <p class="fd-switch">Don't have an account? <button type="button" id="toRegister">Create Account</button></p>
+    </div>
+
+    <div id="fdRegister" style="display:none">
+      <h2>Create Your Account</h2>
+      <p class="fd-sub">Join FileDost and start sharing</p>
+      <label>Full Name</label>
+      <input id="authName" type="text" placeholder="Enter your full name" autocomplete="name">
+      <label>Gmail Address</label>
+      <input id="regEmail" type="email" placeholder="Enter your Gmail address" autocomplete="email">
+      <label>Password</label>
+      <div class="fd-password">
+        <input id="regPassword" type="password" placeholder="Create a strong password" autocomplete="new-password">
+        <button type="button" class="fd-eye" data-target="regPassword">Show</button>
+      </div>
+      <label>Confirm Password</label>
+      <div class="fd-password">
+        <input id="confirmPassword" type="password" placeholder="Confirm your password" autocomplete="new-password">
+        <button type="button" class="fd-eye" data-target="confirmPassword">Show</button>
+      </div>
+      <button type="button" id="registerBtn" class="fd-main-btn">Create Account →</button>
+      <div class="fd-or"><span>OR CONTINUE WITH</span></div>
+      <button type="button" id="googleRegisterBtn" class="fd-google">🌐 Sign up with Google</button>
+      <p class="fd-switch">Already have an account? <button type="button" id="toLogin">Login</button></p>
+    </div>
+
+    <div id="authStatus" class="fd-status">Not logged in</div>
+    <p id="authMessage" class="fd-message"></p>
+    <button type="button" id="logoutBtn" class="fd-logout" style="display:none">Logout</button>
+  </div>
 </section>
+
 
 <section class="upload-box" id="upload">
   <h2>Upload Your Video</h2>
@@ -288,12 +438,13 @@ uploadForm.addEventListener('submit', function(e) {
 loadVideos();
 </script>
 
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
  GoogleAuthProvider, signInWithRedirect, getRedirectResult,
- onAuthStateChanged, signOut
+ onAuthStateChanged, signOut, sendPasswordResetEmail, updateProfile
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -308,46 +459,93 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const statusText = document.getElementById("authStatus");
-const message = document.getElementById("authMessage");
-const email = document.getElementById("authEmail");
-const password = document.getElementById("authPassword");
+const $ = id => document.getElementById(id);
+const message = $("authMessage");
 
-document.getElementById("registerBtn").onclick = async () => {
+function showMessage(text, error=false) {
+ message.textContent = text;
+ message.style.color = error ? "#ffaaaa" : "#9cebc0";
+}
+function tab(mode) {
+ $("fdLogin").style.display = mode === "login" ? "block" : "none";
+ $("fdRegister").style.display = mode === "register" ? "block" : "none";
+ $("showLogin").classList.toggle("active", mode === "login");
+ $("showRegister").classList.toggle("active", mode === "register");
+ showMessage("");
+}
+$("showLogin").onclick = $("toLogin").onclick = () => tab("login");
+$("showRegister").onclick = $("toRegister").onclick = () => tab("register");
+
+document.querySelectorAll(".fd-eye").forEach(btn => {
+ btn.onclick = () => {
+  const field = $(btn.dataset.target);
+  field.type = field.type === "password" ? "text" : "password";
+  btn.textContent = field.type === "password" ? "Show" : "Hide";
+ };
+});
+
+$("registerBtn").onclick = async () => {
+ const name = $("authName").value.trim();
+ const email = $("regEmail").value.trim();
+ const pass = $("regPassword").value;
+ const confirm = $("confirmPassword").value;
+ if (!name || !email || !pass || !confirm) return showMessage("Please fill all fields.", true);
+ if (pass.length < 6) return showMessage("Password must be at least 6 characters.", true);
+ if (pass !== confirm) return showMessage("Passwords do not match.", true);
  try {
-  await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
-  message.textContent = "Account created successfully!";
- } catch(e) { message.textContent = e.message; }
+  const result = await createUserWithEmailAndPassword(auth, email, pass);
+  await updateProfile(result.user, { displayName: name });
+  showMessage("Account created successfully!");
+ } catch(e) { showMessage(e.message, true); }
 };
 
-document.getElementById("loginBtn").onclick = async () => {
+$("loginBtn").onclick = async () => {
+ const email = $("authEmail").value.trim();
+ const pass = $("authPassword").value;
+ if (!email || !pass) return showMessage("Enter Gmail and password.", true);
  try {
-  await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
-  message.textContent = "Login successful!";
- } catch(e) { message.textContent = e.message; }
+  await signInWithEmailAndPassword(auth, email, pass);
+  showMessage("Login successful!");
+ } catch(e) { showMessage(e.message, true); }
 };
 
-document.getElementById("googleBtn").onclick = async () => {
+async function googleLogin() {
+ try { await signInWithRedirect(auth, new GoogleAuthProvider()); }
+ catch(e) { showMessage(e.message, true); }
+}
+$("googleBtn").onclick = googleLogin;
+$("googleRegisterBtn").onclick = googleLogin;
+
+$("forgotBtn").onclick = async () => {
+ const email = $("authEmail").value.trim();
+ if (!email) return showMessage("Enter your Gmail address first.", true);
  try {
-  await signInWithRedirect(auth, new GoogleAuthProvider());
- } catch(e) { message.textContent = e.message; }
+  await sendPasswordResetEmail(auth, email);
+  showMessage("Password reset link sent. Check your Gmail.");
+ } catch(e) { showMessage(e.message, true); }
 };
 
-document.getElementById("logoutBtn").onclick = async () => {
- try { await signOut(auth); message.textContent = "Logged out."; }
- catch(e) { message.textContent = e.message; }
+$("logoutBtn").onclick = async () => {
+ try { await signOut(auth); showMessage("Logged out."); }
+ catch(e) { showMessage(e.message, true); }
 };
 
-getRedirectResult(auth).catch(e => { message.textContent = e.message; });
+getRedirectResult(auth).catch(e => showMessage(e.message, true));
 
 onAuthStateChanged(auth, user => {
- statusText.textContent = user ? "Logged in: " + user.email : "Login or create your free account.";
- document.getElementById("registerBtn").style.display = user ? "none" : "block";
- document.getElementById("loginBtn").style.display = user ? "none" : "block";
- document.getElementById("googleBtn").style.display = user ? "none" : "block";
- document.getElementById("logoutBtn").style.display = user ? "block" : "none";
+ $("authStatus").textContent = user
+  ? "Logged in: " + (user.displayName || user.email)
+  : "Not logged in";
+ $("logoutBtn").style.display = user ? "block" : "none";
+ $("showLogin").style.display = user ? "none" : "block";
+ $("showRegister").style.display = user ? "none" : "block";
+ if (user) {
+  $("fdLogin").style.display = "none";
+  $("fdRegister").style.display = "none";
+ }
 });
 </script>
+
 
 </body>
 </html>
