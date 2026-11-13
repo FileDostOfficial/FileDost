@@ -56,7 +56,20 @@ footer{text-align:center;padding:30px 15px;color:#7887a3;border-top:1px solid #2
   </div>
  </section>
 
- <section class="upload-box" id="upload">
+ 
+<section class="upload-box" id="account">
+ <h2>FileDost Account</h2>
+ <p id="authStatus">Login or create your free account.</p>
+ <input id="authEmail" type="email" placeholder="Email address">
+ <input id="authPassword" type="password" placeholder="Password">
+ <button class="upload-button" id="registerBtn" type="button">Create Account</button>
+ <button class="upload-button" id="loginBtn" type="button" style="margin-top:10px">Login</button>
+ <button class="upload-button" id="googleBtn" type="button" style="margin-top:10px">Continue with Google</button>
+ <button class="upload-button" id="logoutBtn" type="button" style="margin-top:10px;display:none">Logout</button>
+ <p id="authMessage"></p>
+</section>
+
+<section class="upload-box" id="upload">
   <h2>Upload Your Video</h2>
   <p>Select a video from your device to upload it.</p>
   <form id="uploadForm">
@@ -274,5 +287,67 @@ uploadForm.addEventListener('submit', function(e) {
 
 loadVideos();
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {
+ getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+ GoogleAuthProvider, signInWithRedirect, getRedirectResult,
+ onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyA3ICf30AO8EaSii94c4ZiblEPoXlDFci4",
+ authDomain: "filedost.firebaseapp.com",
+ projectId: "filedost",
+ storageBucket: "filedost.firebasestorage.app",
+ messagingSenderId: "1088546177507",
+ appId: "1:1088546177507:web:9b1bfded991f5269f820d6",
+ measurementId: "G-8KK490CLFQ"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const statusText = document.getElementById("authStatus");
+const message = document.getElementById("authMessage");
+const email = document.getElementById("authEmail");
+const password = document.getElementById("authPassword");
+
+document.getElementById("registerBtn").onclick = async () => {
+ try {
+  await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
+  message.textContent = "Account created successfully!";
+ } catch(e) { message.textContent = e.message; }
+};
+
+document.getElementById("loginBtn").onclick = async () => {
+ try {
+  await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+  message.textContent = "Login successful!";
+ } catch(e) { message.textContent = e.message; }
+};
+
+document.getElementById("googleBtn").onclick = async () => {
+ try {
+  await signInWithRedirect(auth, new GoogleAuthProvider());
+ } catch(e) { message.textContent = e.message; }
+};
+
+document.getElementById("logoutBtn").onclick = async () => {
+ try { await signOut(auth); message.textContent = "Logged out."; }
+ catch(e) { message.textContent = e.message; }
+};
+
+getRedirectResult(auth).catch(e => { message.textContent = e.message; });
+
+onAuthStateChanged(auth, user => {
+ statusText.textContent = user ? "Logged in: " + user.email : "Login or create your free account.";
+ document.getElementById("registerBtn").style.display = user ? "none" : "block";
+ document.getElementById("loginBtn").style.display = user ? "none" : "block";
+ document.getElementById("googleBtn").style.display = user ? "none" : "block";
+ document.getElementById("logoutBtn").style.display = user ? "block" : "none";
+});
+</script>
+
 </body>
 </html>
