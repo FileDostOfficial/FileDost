@@ -429,43 +429,102 @@ function getWatchLink(id){
  return location.origin+'/?v='+encodeURIComponent(id);
 }
 
+
+/* FD-PRO-PLAYER-V2 */
 function openFileDostPlayer(item) {
  const old = document.getElementById('fdLinkPlayer');
  if (old) old.remove();
 
  const overlay = document.createElement('div');
  overlay.id = 'fdLinkPlayer';
- overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:999999;display:flex;align-items:center;justify-content:center;padding:18px';
+ overlay.style.cssText = 'position:fixed;inset:0;background:#050914;z-index:999999;overflow:auto;padding:18px;display:flex;align-items:center;justify-content:center';
 
  const panel = document.createElement('div');
- panel.style.cssText = 'width:100%;max-width:850px;background:#111b2d;padding:16px;border-radius:15px';
+ panel.style.cssText = 'width:100%;max-width:950px;background:#111b2d;border:1px solid #304365;border-radius:18px;padding:16px;color:white;box-shadow:0 20px 70px #000';
+
+ const top = document.createElement('div');
+ top.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px';
+
+ const brand = document.createElement('strong');
+ brand.textContent = '▶ FileDost Player';
+ brand.style.cssText = 'font-size:19px;color:#aebfff';
 
  const close = document.createElement('button');
  close.textContent = '✕ Close';
- close.style.cssText = 'padding:10px 16px;margin-bottom:12px;background:#d94355;color:white;border:0;border-radius:8px';
- close.onclick = () => {
-   const player = panel.querySelector('video');
-   if (player) player.pause();
-   overlay.remove();
- };
+ close.style.cssText = 'padding:10px 16px;background:#d94355;color:white;border:0;border-radius:9px;font-weight:bold';
 
- const heading = document.createElement('h3');
+ const heading = document.createElement('h2');
  heading.textContent = item.title || 'FileDost Video';
- heading.style.color = 'white';
+ heading.style.cssText = 'font-size:20px;margin:12px 0;color:white;overflow-wrap:anywhere';
 
  const video = document.createElement('video');
  video.src = item.url;
  video.controls = true;
- video.autoplay = true;
  video.playsInline = true;
- video.style.cssText = 'width:100%;max-height:75vh;background:black;border-radius:10px';
+ video.preload = 'metadata';
+ video.style.cssText = 'width:100%;max-height:70vh;background:black;border-radius:13px;display:block';
 
- panel.append(close, heading, video);
+ const controls = document.createElement('div');
+ controls.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;margin-top:14px';
+
+ const speed = document.createElement('select');
+ speed.style.cssText = 'padding:11px;border-radius:9px;background:#202d48;color:white;border:1px solid #405477';
+ ['0.5','0.75','1','1.25','1.5','2'].forEach(v => {
+   const option = document.createElement('option');
+   option.value = v;
+   option.textContent = v + 'x Speed';
+   if (v === '1') option.selected = true;
+   speed.appendChild(option);
+ });
+ speed.onchange = () => video.playbackRate = Number(speed.value);
+
+ const fullscreen = document.createElement('button');
+ fullscreen.textContent = '⛶ Fullscreen';
+ fullscreen.style.cssText = 'padding:11px 15px;background:#536dfe;color:white;border:0;border-radius:9px';
+ fullscreen.onclick = () => {
+   if (video.requestFullscreen) video.requestFullscreen();
+   else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+ };
+
+ const share = document.createElement('button');
+ share.textContent = '↗ Share Video';
+ share.style.cssText = 'padding:11px 15px;background:#16875d;color:white;border:0;border-radius:9px';
+ share.onclick = async () => {
+   const url = getWatchLink(item.id);
+   try {
+     if (navigator.share) await navigator.share({title:item.title || 'FileDost Video',url});
+     else {
+       await navigator.clipboard.writeText(url);
+       alert('Video link copied!');
+     }
+   } catch(e) {
+     if (e.name !== 'AbortError') alert('Share nahi ho paya.');
+   }
+ };
+
+ const download = document.createElement('a');
+ download.href = '/api/download/' + encodeURIComponent(item.id);
+ download.textContent = '⬇ Download';
+ download.style.cssText = 'padding:11px 15px;background:#263b5c;color:white;border-radius:9px;text-decoration:none;font-weight:bold';
+
+ controls.append(speed, fullscreen, share, download);
+ top.append(brand, close);
+ panel.append(top, heading, video, controls);
  overlay.appendChild(panel);
+
+ close.onclick = () => {
+   video.pause();
+   video.removeAttribute('src');
+   video.load();
+   overlay.remove();
+ };
+
  overlay.addEventListener('click', e => {
    if (e.target === overlay) close.click();
  });
+
  document.body.appendChild(overlay);
+ video.play().catch(() => {});
 }
 
 document.getElementById('fdLinkForm').addEventListener('submit', async e => {
