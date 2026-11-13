@@ -510,11 +510,20 @@ $("showLogin").onclick = $("toLogin").onclick = () => tab("login");
 $("showRegister").onclick = $("toRegister").onclick = () => tab("register");
 
 document.querySelectorAll(".fd-eye").forEach(btn => {
- btn.onclick = () => {
-  const field = $(btn.dataset.target);
-  field.type = field.type === "password" ? "text" : "password";
-  btn.textContent = "👁️";
- };
+ btn.type = "button";
+ btn.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const field = document.getElementById(btn.dataset.target);
+  if (!field) return;
+
+  const showing = field.type === "password";
+  field.type = showing ? "text" : "password";
+
+  btn.textContent = showing ? "🙈" : "👁️";
+  btn.setAttribute("aria-label", showing ? "Hide password" : "Show password");
+ });
 });
 
 $("registerBtn").onclick = async () => {
